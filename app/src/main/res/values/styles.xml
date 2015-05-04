@@ -1,0 +1,28 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/background</item>
+        <item name="bottomSheetStyle">@style/BottomSheet.StyleDialog</item>
+    </style>
+
+    <style name="puzzletext" parent="@android:style/TextAppearance.Widget.TextView">
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:typeface">serif</item>
+        <item name="android:textSize">35sp</item>
+        <item name="android:layout_margin">15dp</item>
+    </style>
+
+    <style name="BottomSheet.StyleDialog" parent="BottomSheet.Dialog">
+        <item name="android:windowAnimationStyle">@style/BottomSheet.Animation</item>
+        <item name="android:textColorPrimary">@color/dark_green</item>
+        <item name="android:textColorSecondary">@color/dark_green</item>
+        <item name="android:textColorHint">@color/dark_green</item>
+        <item name="bs_dialogBackground">@android:color/white</item>
+        <item name="bs_dividerColor">@android:color/black</item>
+        <item name="bs_numColumns">2</item>
+
+    </style>
+
+</resources>
