@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="mustwakeup.galaxyvs.com.mustwakeup" >
+    package="mustwakeup.galaxyvs.com.mustwakeup">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
-            android:name=".PuzzelActivity"
-            android:label="@string/app_name" >
-        </activity>
+            android:name=".Activities.PuzzelActivity"
+            android:label="@string/app_name" />
         <activity
-            android:name=".AlaramSetActivity"
-            android:label="@string/title_activity_alaram_set" >
+            android:name=".Activities.AlaramSetActivity"
+            android:label="@string/title_activity_alaram_set"></activity>
+
+        <receiver
+            android:name=".Receivers.AlarmReveiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="MustWakeup.Alarm" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".Activities.AlarmListActivity"
+            android:label="@string/title_activity_alarm_list">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
 
-        <receiver
-            android:name=".AlarmReveiver"
-            android:enabled="true"
-            android:exported="true" >
-        </receiver>
+        </activity>
+        <activity
+            android:name=".Activities.GridPuzzelActivity"
+            android:label="@string/title_activity_grid_puzzel">
+
+        </activity>
     </application>
 
 </manifest>

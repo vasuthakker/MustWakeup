@@ -1,4 +1,4 @@
-package mustwakeup.galaxyvs.com.mustwakeup;
+package mustwakeup.galaxyvs.com.mustwakeup.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

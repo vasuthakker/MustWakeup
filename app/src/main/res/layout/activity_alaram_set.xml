@@ -3,26 +3,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="mustwakeup.galaxyvs.com.mustwakeup.AlaramSetActivity">
+    tools:context="mustwakeup.galaxyvs.com.mustwakeup.Activities.AlaramSetActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:background="#004d40"
-        android:padding="10dp">
+        android:background="@color/dark_green"
+        android:padding="10dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
             android:id="@+id/txt_alarmname"
             android:layout_centerInParent="true"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
 
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/img_save"
+            android:src="@drawable/tick" />
+
     </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/alarmset_btncancel"
+            android:layout_weight="0.5"
+            style="@style/buttons" />
+
+        <Button
+            style="@style/buttons"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:id="@+id/alarmset_btnsave"
+            android:layout_weight="0.5" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -32,14 +59,34 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/alarmset_txtdate"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="5dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/alarmTime"
             android:textStyle="bold"
             android:textSize="80sp"
-            android:layout_marginTop="55dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="55dp"
             android:textColor="@android:color/white"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/alarmset_txtdate"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp" />
+
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            layout="@layout/weeklayout"
+            android:layout_alignParentBottom="false"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/alarmTime"
+            android:layout_marginBottom="10dp" />
     </RelativeLayout>
 
     <View
@@ -129,7 +176,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/linearLayout2"
-        android:background="@color/lite_green" >
+        android:background="@color/lite_green">
 
         <TextView
             android:layout_width="wrap_content"

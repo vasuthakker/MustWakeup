@@ -1,23 +1,33 @@
-package mustwakeup.galaxyvs.com.mustwakeup;
+package mustwakeup.galaxyvs.com.mustwakeup.Activities;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.Random;
+
+import mustwakeup.galaxyvs.com.mustwakeup.Entities.AlarmEntity;
+import mustwakeup.galaxyvs.com.mustwakeup.Helper.AlarmHelper;
+import mustwakeup.galaxyvs.com.mustwakeup.R;
 
 
 public class PuzzelActivity extends FragmentActivity {
@@ -39,7 +49,11 @@ public class PuzzelActivity extends FragmentActivity {
 
     private Ringtone ring;
 
+    private MediaPlayer mediaPlayer;
 
+    private int maxLimit = 10;
+
+    private AlarmEntity alarmEntity;
     private int counter = 0;
 
     @Override
@@ -53,6 +67,8 @@ public class PuzzelActivity extends FragmentActivity {
         btnCheck = (Button) findViewById(R.id.chkAnswer);
         txtAnswer = (EditText) findViewById(R.id.answerEditText);
         txtCounter = (TextView) findViewById(R.id.remainingCounter);
+
+        txtCounter.setText(5 - counter + " puzzle remaining to stop the alarm");
 
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,61 +88,85 @@ public class PuzzelActivity extends FragmentActivity {
                 switch (signPos) {
                     case 0:
                         if (value == (first / second)) {
-                            msg = "Division success";
+                            //  msg = "Division success";
                             isAnswerSuccess = true;
                         } else
                             counter--;
                         break;
                     case 1:
                         if (value == (first * second)) {
-                            msg = "Multiplication success";
+                            //  msg = "Multiplication success";
                             isAnswerSuccess = true;
                         } else
                             counter--;
                         break;
                     case 2:
                         if (value == (first + second)) {
-                            msg = "Addition success";
+                            //  msg = "Addition success";
                             isAnswerSuccess = true;
                         } else
                             counter--;
                         break;
                     case 3:
                         if (value == (first - second)) {
-                            msg = "Subtraction success";
+                            // msg = "Subtraction success";
                             isAnswerSuccess = true;
                         } else
                             counter--;
                         break;
                 }
                 if (counter < 5) {
-                    Toast.makeText(PuzzelActivity.this, msg + "  " + NumberProcessor.getWordRepresentation(value), Toast.LENGTH_SHORT).show();
+                    //   Toast.makeText(PuzzelActivity.this, msg + "  " + NumberProcessor.getWordRepresentation(value), Toast.LENGTH_SHORT).show();
                     if (isAnswerSuccess) {
                         generateNewNunbres();
                         txtCounter.setText(5 - counter + " puzzle remaining to stop the alarm");
+                        displayToast(true);
                     }
+                    else
+                        displayToast(false);
                 } else {
-                    if (ring != null)
-                        ring.stop();
-                    DialogFragment dialog=new WokeUpDialog();
-                    dialog.show(getSupportFragmentManager(),"wokeup");
+                    DialogFragment dialog = new WokeUpDialog();
+                    dialog.show(getSupportFragmentManager(), "awake");
                 }
             }
         });
 
         generateNewNunbres();
 
-        String ringUri = Utils.getValue(this, "ring");
-        if (ringUri != null && !ringUri.isEmpty()) {
-            ring = RingtoneManager.getRingtone(this, Uri.parse(ringUri));
-            ring.play();
+        alarmEntity = (AlarmEntity) getIntent().getSerializableExtra("alarm");
+        try {
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(this, Uri.parse(alarmEntity.getTone()));
+            final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+                mediaPlayer.setLooping(true);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            }
+        } catch (IOException e) {
+            Log.e("Error", "IOException", e);
         }
-
     }
 
+
+    private void displayToast(boolean isRight) {
+        Toast toast = new Toast(PuzzelActivity.this);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER,0,0);
+        ImageView responseImageView = new ImageView(PuzzelActivity.this);
+        if (isRight)
+            responseImageView.setImageResource(R.drawable.right);
+        else
+            responseImageView.setImageResource(R.drawable.wrong);
+        toast.setView(responseImageView);
+        toast.show();
+    }
+
+
     private void generateNewNunbres() {
-        first = random.nextInt(100);
-        second = random.nextInt(100);
+        first = random.nextInt(maxLimit);
+        second = random.nextInt(maxLimit);
         lblFirst.setText(String.valueOf(first));
         lblSecond.setText(String.valueOf(second));
 
@@ -157,6 +197,21 @@ public class PuzzelActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
     private class WokeUpDialog extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -166,13 +221,13 @@ public class PuzzelActivity extends FragmentActivity {
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.dialog_wakup);
 
-            Button btnWokeUp=(Button)dialog.findViewById(R.id.dialog_btnWokeUp);
-            Button btnMoreQuestion=(Button)dialog.findViewById(R.id.dialog_btnMoreQuestion);
+            Button btnWokeUp = (Button) dialog.findViewById(R.id.dialog_btnWokeUp);
+            Button btnMoreQuestion = (Button) dialog.findViewById(R.id.dialog_btnMoreQuestion);
 
             btnMoreQuestion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    counter=0;
+                    counter = 0;
                     generateNewNunbres();
                     txtCounter.setText(5 - counter + " puzzle remaining to stop the alarm");
                     dismiss();
@@ -182,7 +237,15 @@ public class PuzzelActivity extends FragmentActivity {
             btnWokeUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (mediaPlayer != null) {
+                        mediaPlayer.stop();
+                        mediaPlayer.release();
+                        mediaPlayer = null;
+                    }
+                    alarmEntity.setIsActive(0);
+                    AlarmHelper.updateAlarm(PuzzelActivity.this, alarmEntity);
                     dismiss();
+                    PuzzelActivity.this.finish();
                 }
             });
 
