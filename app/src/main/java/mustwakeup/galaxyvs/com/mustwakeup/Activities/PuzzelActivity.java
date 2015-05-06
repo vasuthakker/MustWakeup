@@ -10,12 +10,14 @@ import android.media.Ringtone;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,7 +32,7 @@ import mustwakeup.galaxyvs.com.mustwakeup.Helper.AlarmHelper;
 import mustwakeup.galaxyvs.com.mustwakeup.R;
 
 
-public class PuzzelActivity extends FragmentActivity {
+public class PuzzelActivity extends ActionBarActivity {
 
     private TextView lblFirst;
     private TextView lblSecond;
@@ -61,6 +63,7 @@ public class PuzzelActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puzzel);
 
+
         lblFirst = (TextView) findViewById(R.id.first);
         lblSecond = (TextView) findViewById(R.id.Second);
         lblSign = (TextView) findViewById(R.id.SignTextView);
@@ -73,61 +76,17 @@ public class PuzzelActivity extends FragmentActivity {
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String val = txtAnswer.getText().toString();
-                boolean isAnswerSuccess = false;
-                long value = 0;
-                if (val == null || val.isEmpty()) {
-                    txtAnswer.setError("Please enter value to check");
-                    return;
-                } else {
-                    value = Integer.parseInt(val);
+                checkAnswer();
+            }
+        });
+
+        txtAnswer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    checkAnswer();
                 }
-                txtAnswer.setText("");
-                String msg = "Wrong answer";
-                counter++;
-                switch (signPos) {
-                    case 0:
-                        if (value == (first / second)) {
-                            //  msg = "Division success";
-                            isAnswerSuccess = true;
-                        } else
-                            counter--;
-                        break;
-                    case 1:
-                        if (value == (first * second)) {
-                            //  msg = "Multiplication success";
-                            isAnswerSuccess = true;
-                        } else
-                            counter--;
-                        break;
-                    case 2:
-                        if (value == (first + second)) {
-                            //  msg = "Addition success";
-                            isAnswerSuccess = true;
-                        } else
-                            counter--;
-                        break;
-                    case 3:
-                        if (value == (first - second)) {
-                            // msg = "Subtraction success";
-                            isAnswerSuccess = true;
-                        } else
-                            counter--;
-                        break;
-                }
-                if (counter < 5) {
-                    //   Toast.makeText(PuzzelActivity.this, msg + "  " + NumberProcessor.getWordRepresentation(value), Toast.LENGTH_SHORT).show();
-                    if (isAnswerSuccess) {
-                        generateNewNunbres();
-                        txtCounter.setText(5 - counter + " puzzle remaining to stop the alarm");
-                        displayToast(true);
-                    }
-                    else
-                        displayToast(false);
-                } else {
-                    DialogFragment dialog = new WokeUpDialog();
-                    dialog.show(getSupportFragmentManager(), "awake");
-                }
+                txtAnswer.requestFocus();
+                return false;
             }
         });
 
@@ -149,11 +108,73 @@ public class PuzzelActivity extends FragmentActivity {
         }
     }
 
+    private void checkAnswer() {
+        String val = txtAnswer.getText().toString();
+        boolean isAnswerSuccess = false;
+        long value = 0;
+        if (val == null || val.isEmpty()) {
+            txtAnswer.setError("Please enter value to check");
+            return;
+        } else {
+            value = Integer.parseInt(val);
+        }
+        txtAnswer.setText("");
+        String msg = "Wrong answer";
+        counter++;
+        switch (signPos) {
+            case 0:
+                try {
+                    if (value == (first / second)) {
+                        //  msg = "Division success";
+                        isAnswerSuccess = true;
+                    } else
+                        counter--;
+                } catch (ArithmeticException e) {
+                    isAnswerSuccess = true;
+                }
+                break;
+            case 1:
+                if (value == (first * second)) {
+                    //  msg = "Multiplication success";
+                    isAnswerSuccess = true;
+                } else
+                    counter--;
+                break;
+            case 2:
+                if (value == (first + second)) {
+                    //  msg = "Addition success";
+                    isAnswerSuccess = true;
+                } else
+                    counter--;
+                break;
+            case 3:
+                if (value == (first - second)) {
+                    // msg = "Subtraction success";
+                    isAnswerSuccess = true;
+                } else
+                    counter--;
+                break;
+        }
+        if (counter < 5) {
+            //   Toast.makeText(PuzzelActivity.this, msg + "  " + NumberProcessor.getWordRepresentation(value), Toast.LENGTH_SHORT).show();
+            if (isAnswerSuccess) {
+                generateNewNunbres();
+                txtCounter.setText(5 - counter + " puzzle remaining to stop the alarm");
+                displayToast(true);
+            } else
+                displayToast(false);
+        } else {
+            DialogFragment dialog = new WokeUpDialog();
+            dialog.show(getSupportFragmentManager(), "awake");
+        }
+
+
+    }
 
     private void displayToast(boolean isRight) {
         Toast toast = new Toast(PuzzelActivity.this);
         toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER,0,0);
+        toast.setGravity(Gravity.TOP, 0, 50);
         ImageView responseImageView = new ImageView(PuzzelActivity.this);
         if (isRight)
             responseImageView.setImageResource(R.drawable.right);
@@ -220,10 +241,8 @@ public class PuzzelActivity extends FragmentActivity {
             dialog.setCanceledOnTouchOutside(false);
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.dialog_wakup);
-
             Button btnWokeUp = (Button) dialog.findViewById(R.id.dialog_btnWokeUp);
             Button btnMoreQuestion = (Button) dialog.findViewById(R.id.dialog_btnMoreQuestion);
-
             btnMoreQuestion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -233,7 +252,6 @@ public class PuzzelActivity extends FragmentActivity {
                     dismiss();
                 }
             });
-
             btnWokeUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -242,16 +260,14 @@ public class PuzzelActivity extends FragmentActivity {
                         mediaPlayer.release();
                         mediaPlayer = null;
                     }
-                    alarmEntity.setIsActive(0);
+                    if (alarmEntity.getWeekDays() == null || alarmEntity.getWeekDays().isEmpty())
+                        alarmEntity.setIsActive(0);
                     AlarmHelper.updateAlarm(PuzzelActivity.this, alarmEntity);
                     dismiss();
                     PuzzelActivity.this.finish();
                 }
             });
-
             return dialog;
-
-
         }
     }
 }

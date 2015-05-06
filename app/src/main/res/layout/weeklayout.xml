@@ -17,6 +17,7 @@
             android:layout_weight="0.14"
             android:gravity="center"
             android:text="S"
+            android:tag="su"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/dark_green_2"
             android:textSize="25sp" />
@@ -28,6 +29,7 @@
             android:layout_weight="0.14"
             android:gravity="center"
             android:text="M"
+            android:tag="mo"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/dark_green_2"
             android:textSize="25sp" />
@@ -39,6 +41,7 @@
             android:layout_weight="0.14"
             android:gravity="center"
             android:text="T"
+            android:tag="tu"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/dark_green_2"
             android:textSize="25sp" />
@@ -50,6 +53,7 @@
             android:layout_weight="0.14"
             android:gravity="center"
             android:text="W"
+            android:tag="we"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/dark_green_2"
             android:textSize="25sp" />
@@ -61,6 +65,7 @@
             android:layout_weight="0.14"
             android:gravity="center"
             android:text="T"
+            android:tag="th"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/dark_green_2"
             android:textSize="25sp" />
@@ -72,6 +77,7 @@
             android:layout_weight="0.14"
             android:gravity="center"
             android:text="F"
+            android:tag="fr"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/dark_green_2"
             android:textSize="25sp" />
@@ -83,6 +89,7 @@
             android:layout_weight="0.14"
             android:gravity="center"
             android:text="S"
+            android:tag="sa"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/dark_green_2"
             android:textSize="25sp" />

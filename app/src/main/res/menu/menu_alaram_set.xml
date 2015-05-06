@@ -2,17 +2,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="mustwakeup.galaxyvs.com.mustwakeup.Activities.AlaramSetActivity">
+
+    <item
+        android:id="@+id/activity_non"
+        android:title="@string/activity_non"
+        android:orderInCategory="1"
+        app:showAsAction="always"
+        android:icon="@drawable/non"/>
+
     <item
         android:id="@+id/activity_math"
         android:title="@string/activity_math"
-        android:orderInCategory="100"
+        android:orderInCategory="2"
         app:showAsAction="always"
         android:icon="@drawable/math_puzzle"/>
 
     <item
         android:id="@+id/activity_pic"
         android:title="@string/activity_pic"
-        android:orderInCategory="100"
+        android:orderInCategory="3"
         app:showAsAction="always"
         android:icon="@drawable/pic_puzzle"/>
 </menu>

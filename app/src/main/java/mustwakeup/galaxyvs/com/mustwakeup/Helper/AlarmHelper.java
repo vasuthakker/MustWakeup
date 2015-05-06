@@ -25,7 +25,7 @@ public class AlarmHelper {
     public static final String KEY_TIME = "TIME";
     public static final String KEY_ISACTIVE = "ISACTIVE";
 
-    public static final String KEY_WEEKDAY="WEEKDAY";
+    public static final String KEY_WEEKDAY = "WEEKDAY";
 
     public static void insertAlarm(Context context, AlarmEntity alarmEntity) {
         DBHandler dbHandler = new DBHandler(context);
@@ -45,7 +45,7 @@ public class AlarmHelper {
         cv.put(KEY_ACTIVITY, alarmEntity.getActivityType());
         cv.put(KEY_TIME, alarmEntity.getTime());
         cv.put(KEY_ISACTIVE, alarmEntity.getIsActive());
-        cv.put(KEY_WEEKDAY,alarmEntity.getWeekDays());
+        cv.put(KEY_WEEKDAY, alarmEntity.getWeekDays());
         return cv;
     }
 
@@ -88,6 +88,24 @@ public class AlarmHelper {
             db.close();
         }
         return alarms;
+    }
+
+    public static AlarmEntity getAlarm(Context context, int id) {
+        AlarmEntity alarm = null;
+        DBHandler dbHandler = new DBHandler(context);
+        SQLiteDatabase db = dbHandler.getReadableDatabase();
+        try {
+            Cursor cursor = db.query(TABLE_NAME, null, KEY_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
+
+            while (cursor.moveToNext()) {
+                alarm = getEntityFromCursor(cursor);
+            }
+            cursor.close();
+
+        } finally {
+            db.close();
+        }
+        return alarm;
     }
 
     private static AlarmEntity getEntityFromCursor(Cursor cursor) {

@@ -54,7 +54,8 @@ public class GridPuzzelActivity extends ActionBarActivity {
         setContentView(R.layout.activity_grid_puzzel);
 
         gridPuzzel = (GridView) findViewById(R.id.gridpuzzel_gridview);
-        txtCounter=(TextView)findViewById(R.id.grid_txtcounter);
+        txtCounter = (TextView) findViewById(R.id.grid_txtcounter);
+
 
         images = new ArrayList<Integer>();
 
@@ -80,12 +81,10 @@ public class GridPuzzelActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (counter < 5) {
                     if (images.get(position) == R.drawable.smily_6) {
-                        counter++;
                         txtCounter.setText(5 - counter + " puzzle remaining to stop the alarm");
+                        counter++;
                         displayToast(true);
-                    }
-                    else
-                    {
+                    } else {
                         displayToast(false);
                     }
                     shuffle();
@@ -116,11 +115,10 @@ public class GridPuzzelActivity extends ActionBarActivity {
     }
 
 
-
     private void displayToast(boolean isRight) {
         Toast toast = new Toast(GridPuzzelActivity.this);
         toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER,0,0);
+        toast.setGravity(Gravity.TOP, 0, 50);
         ImageView responseImageView = new ImageView(GridPuzzelActivity.this);
         if (isRight)
             responseImageView.setImageResource(R.drawable.right);
@@ -171,7 +169,8 @@ public class GridPuzzelActivity extends ActionBarActivity {
                         mediaPlayer.release();
                         mediaPlayer = null;
                     }
-                    alarmEntity.setIsActive(0);
+                    if (alarmEntity.getWeekDays() == null || alarmEntity.getWeekDays().isEmpty())
+                        alarmEntity.setIsActive(0);
                     AlarmHelper.updateAlarm(GridPuzzelActivity.this, alarmEntity);
                     dismiss();
                     GridPuzzelActivity.this.finish();

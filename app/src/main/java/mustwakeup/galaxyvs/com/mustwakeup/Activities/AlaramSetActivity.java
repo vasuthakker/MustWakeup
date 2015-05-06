@@ -1,6 +1,7 @@
 package mustwakeup.galaxyvs.com.mustwakeup.Activities;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
@@ -146,6 +147,10 @@ public class AlaramSetActivity extends FragmentActivity {
                                 typeActivity = 2;
                                 txtActivityName.setText(getString(R.string.activity_pic));
                                 break;
+                            case R.id.activity_non:
+                                typeActivity = 3;
+                                txtActivityName.setText(getString(R.string.activity_non));
+                                break;
                         }
                     }
                 }).show();
@@ -162,9 +167,14 @@ public class AlaramSetActivity extends FragmentActivity {
             String activity = getString(R.string.activity_math);
             if (alarmEntity.getActivityType() == 2)
                 activity = getString(R.string.activity_pic);
+            else if (alarmEntity.getActivityType() == 3)
+                activity = getString(R.string.activity_non);
+            typeActivity = alarmEntity.getActivityType();
             txtActivityName.setText(activity);
             txtDate.setText(dateFormatter.format(alarmEntity.getTime()));
             timeToSet = alarmEntity.getTime();
+            ringUri = Uri.parse(alarmEntity.getTone());
+            setWeekDay(alarmEntity.getWeekDays());
         } else {
             handler.postDelayed(getTime, 60000);
             txtRingName.setText(RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)).getTitle(this));
@@ -202,9 +212,10 @@ public class AlaramSetActivity extends FragmentActivity {
                     if (tv.getCurrentTextColor() == Color.WHITE) {
                         Calendar cal = Calendar.getInstance();
                         cal.set(Calendar.DAY_OF_WEEK, i + 1);
+                        cal.set(Calendar.SECOND, 0);
 
                         Calendar alarmCal = Calendar.getInstance();
-                        alarm.setTime(timeToSet);
+                        alarmCal.setTimeInMillis(timeToSet);
 
                         cal.set(Calendar.HOUR_OF_DAY, alarmCal.get(Calendar.HOUR_OF_DAY));
                         cal.set(Calendar.MINUTE, alarmCal.get(Calendar.MINUTE));
@@ -214,10 +225,9 @@ public class AlaramSetActivity extends FragmentActivity {
 
                         if (weekDay.length() > 0)
                             weekDay.append(",");
-                        weekDay.append(tv.getText().toString());
+                        weekDay.append(tv.getTag().toString());
 
-
-                        setAlarm(alarm, cal.getTimeInMillis());
+                        setAlarm(alarm, cal.getTimeInMillis(), (alarm.getId() * 7) + i);
 
                     }
                 }
@@ -225,6 +235,15 @@ public class AlaramSetActivity extends FragmentActivity {
                 if (weekDay.length() > 0) {
                     alarm.setWeekDays(weekDay.toString());
                     AlarmHelper.updateAlarm(AlaramSetActivity.this, alarm);
+                    finish();
+                } else {
+                    new AlertDialog.Builder(AlaramSetActivity.this).setMessage("Please select at least one day").setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).show();
+
                 }
 
 
@@ -239,21 +258,53 @@ public class AlaramSetActivity extends FragmentActivity {
         });
     }
 
-    private void setAlarm(AlarmEntity alarm, long timeToSet) {
+    private void setWeekDay(String weekDays) {
+        if (weekDays != null && !weekDays.isEmpty()) {
+            String[] days = weekDays.split(",");
+            for (String day : days) {
+                switch (day) {
+                    case "su":
+                        txtSun.setTextColor(Color.WHITE);
+                        break;
+                    case "mo":
+                        txtMon.setTextColor(Color.WHITE);
+                        break;
+                    case "tu":
+                        txtTue.setTextColor(Color.WHITE);
+                        break;
+                    case "we":
+                        txtWed.setTextColor(Color.WHITE);
+                        break;
+                    case "th":
+                        txtThu.setTextColor(Color.WHITE);
+                        break;
+                    case "fr":
+                        txtFri.setTextColor(Color.WHITE);
+                        break;
+                    case "sa":
+                        txtSat.setTextColor(Color.WHITE);
+                        break;
+
+                }
+            }
+        }
+    }
+
+    private void setAlarm(AlarmEntity alarm, long timeToSet, int pendingId) {
         AlarmManager manager = (AlarmManager) AlaramSetActivity.this.getSystemService(Context.ALARM_SERVICE);
 
         Intent inte = new Intent(AlaramSetActivity.this, AlarmReveiver.class);
         inte.putExtra("alarm", alarm);
         inte.setAction("MustWakeup.Alarm");
 
-        PendingIntent pi = PendingIntent.getBroadcast(AlaramSetActivity.this, alarm.getId(), inte, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi = PendingIntent.getBroadcast(AlaramSetActivity.this, pendingId, inte, PendingIntent.FLAG_UPDATE_CURRENT);
         manager.set(AlarmManager.RTC_WAKEUP, timeToSet, pi);
 
         Toast toast = Toast.makeText(AlaramSetActivity.this.getApplicationContext(), "Alarm set for " + new SimpleDateFormat("dd-MMM-yyyy KK:mm a").format(timeToSet), Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.show();
 
-        finish();
+
     }
 
     private View.OnClickListener weekDayListener = new View.OnClickListener() {

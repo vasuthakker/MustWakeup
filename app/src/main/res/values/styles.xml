@@ -16,6 +16,27 @@
     </style>
 
 
+    <style name="AppTheme.puzzle" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/dark_green</item>
+        <item name="colorPrimaryDark">@color/dark_green_2</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="bottomSheetStyle">@style/BottomSheet.StyleDialog</item>
+        <item name="android:button">@style/buttons</item>
+    </style>
+
+    <style name="Theme.Transparent" parent="Theme.AppCompat">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+
+
+
     <style name="puzzletext" parent="@android:style/TextAppearance.Widget.TextView">
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
         <item name="android:typeface">serif</item>

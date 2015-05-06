@@ -32,6 +32,7 @@ public class AlarmListActivity extends ActionBarActivity {
 
         aBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.dark_green)));
 
+        aBar.setTitle(getString(R.string.title_activity_alarm_list));
 
     }
 

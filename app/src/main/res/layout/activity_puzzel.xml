@@ -1,76 +1,92 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".PuzzelActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PuzzelActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
+
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@color/dark_green"
+        android:gravity="center_vertical|center_horizontal"
+        android:padding="15dp"
+        android:text="@string/solve_math_problem"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/remainingCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/dark_green"
+        android:layout_above="@+id/puzzleLaoyut"
+        android:layout_marginBottom="15dp"/>
+
+    <LinearLayout
+        android:id="@+id/puzzleLaoyut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:gravity="center_horizontal"
-        android:layout_centerInParent="true">
+        android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
                 android:id="@+id/Second"
-                style="@style/puzzletext"/>
-
-            <TextView
+                style="@style/puzzletext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
                 android:id="@+id/SignTextView"
-                style="@style/puzzletext"/>
-
-            <TextView
+                style="@style/puzzletext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
                 android:id="@+id/first"
-                style="@style/puzzletext" />
+                style="@style/puzzletext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Large Text" />
         </LinearLayout>
 
         <EditText
+            android:id="@+id/answerEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="numberSigned"
-            android:ems="10"
-            android:id="@+id/answerEditText"
-            android:textSize="35sp"
             android:layout_marginTop="10dp"
+            android:ems="10"
+            android:gravity="center_horizontal"
             android:hint="@string/answer_hint"
-            android:gravity="center_horizontal" />
+            android:inputType="numberSigned"
+            android:textSize="35sp" />
 
         <Button
+            android:id="@+id/chkAnswer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/check_answer"
-            android:id="@+id/chkAnswer"
             android:layout_marginTop="30dp"
-            android:textSize="20sp"
             android:background="@color/dark_green"
+            android:padding="10dp"
+            android:text="@string/check_answer"
             android:textColor="@android:color/white"
-            android:padding="10dp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/remainingCounter"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/dark_green" />
 </RelativeLayout>

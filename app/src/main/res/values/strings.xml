@@ -5,7 +5,7 @@
     <string name="action_settings">Add new alarm</string>
     <string name="check_answer">Check Answer</string>
     <string name="answer_hint">Enter Answer</string>
-    <string name="title_activity_alaram_set">AlaramSetActivity</string>
+    <string name="title_activity_alaram_set">Set an alarm</string>
     <string name="pick_sound">Pick sound for your alarm</string>
     <string name="more_question">More Question</string>
     <string name="woke_up">Awake</string>
@@ -15,11 +15,15 @@
 
     <string name="activity_math">Math Puzzles</string>
     <string name="activity_pic">Picture Puzzles</string>
+    <string name="activity_non">Normal</string>
     <string name="alarm_name">Alram Name</string>
     <string name="alarm_name_hint">Enter Alarm Name</string>
     <string name="title_activity_alarm_list">List of alarms</string>
-    <string name="title_activity_grid_puzzel">GridPuzzelActivity</string>
-    <string name="chose_different_image">Find the angel smiley</string>
+    <string name="title_activity_math_puzzle">Solve equations</string>
+    <string name="title_activity_grid_puzzel">Find an angel</string>
+    <string name="chose_different_image">Find the angel</string>
+    <string name="solve_math_problem">Solve math problems</string>
+    <string name="title_activity_normal_alarm">NormalAlarmActivity</string>
 
 
 </resources>
