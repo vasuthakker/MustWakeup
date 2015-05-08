@@ -123,12 +123,16 @@ public class AlaramSetActivity extends FragmentActivity {
         ringPicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+            /*    Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select ringtone for notifications:");
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM);
-                startActivityForResult(intent, 19);
+                startActivityForResult(intent, 19);*/
+
+                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i,19);
+
             }
         });
 
@@ -324,7 +328,7 @@ public class AlaramSetActivity extends FragmentActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            ringUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+            ringUri = Uri.parse(data.getData().toString());
             Utils.putValue(this, "ring", ringUri.toString());
             Toast.makeText(this, "Alarm Ringtone selected", Toast.LENGTH_SHORT).show();
             Ringtone ring = RingtoneManager.getRingtone(this, ringUri);
@@ -401,10 +405,13 @@ public class AlaramSetActivity extends FragmentActivity {
             cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
             cal.set(Calendar.MINUTE, minute);
 
-            String ampm = "AM";
-            if (hourOfDay > 12) {
-                ampm = "PM";
-                hourOfDay -= 12;
+            String ampm = "";
+            if (DateFormat.is24HourFormat(getActivity())) {
+                ampm = "AM";
+                if (hourOfDay > 12) {
+                    ampm = "PM";
+                    hourOfDay -= 12;
+                }
             }
             handler.removeCallbacks(getTime);
             alarmTime.setText(hourOfDay + ":" + minute + " " + ampm);

@@ -16,6 +16,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -51,6 +52,9 @@ public class GridPuzzelActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+
         setContentView(R.layout.activity_grid_puzzel);
 
         gridPuzzel = (GridView) findViewById(R.id.gridpuzzel_gridview);
@@ -96,21 +100,35 @@ public class GridPuzzelActivity extends ActionBarActivity {
         });
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         alarmEntity = (AlarmEntity) getIntent().getSerializableExtra("alarm");
-        //ring = RingtoneManager.getRingtone(this, Uri.parse(ringUri));
-        //ring.play();
         try {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setDataSource(this, Uri.parse(alarmEntity.getTone()));
             final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+            if (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) != 0) {
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 mediaPlayer.setLooping(true);
                 mediaPlayer.prepare();
                 mediaPlayer.start();
             }
         } catch (IOException e) {
             Log.e("Error", "IOException", e);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
         }
     }
 
